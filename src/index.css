@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #7B4B7A;
+  --color-secondary: #B58BAF;
+  --color-accent: #D8B26E;
+  --color-background: #FFF6F8;
+  --color-surface: #F8EFF5;
+  --color-text-primary: #3E2A3E;
+  --color-text-secondary: #7D627D;
+  --color-success: #6D9F71;
+  
+  --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-medium: 0 12px 32px rgba(0, 0, 0, 0.1);
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Outfit", sans-serif;
+}
+
+/* Base Styles */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0b060b; /* Dark backdrop for desktop spacing */
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  overflow-x: clip; /* Using clip instead of hidden so position: sticky behaves correctly on all viewports */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-secondary);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Glassmorphism Helper */
+.glass-panel {
+  background: rgba(248, 239, 245, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Elegant Text Shadows for Cinematic Overlays */
+.text-shadow-elegant {
+  text-shadow: 0 2px 4px rgba(62, 42, 62, 0.15), 0 4px 12px rgba(62, 42, 62, 0.1);
+}
+
+.text-shadow-gold {
+  text-shadow: 0 2px 8px rgba(216, 178, 110, 0.2);
+}
+
+/* Custom Lenis Smooth Scroll Configuration */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overflow: clip;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
