@@ -56,7 +56,7 @@ export default function Venue() {
           {/* Map Preview Mockup (Stylized vector graphic) */}
           <div className="relative w-full h-36 bg-surface/50 rounded-xl mb-6 border border-primary/5 overflow-hidden flex items-center justify-center">
             {/* Grid pattern */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(123,75,122,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(123,75,122,0.03)_1px,transparent_1px)] bg-[size:14px_24px]" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(123,75,122,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(123,75,122,0.03)_1px,transparent_1px)] bg-size[14px_24px]" />
             
             {/* Route path lines */}
             <svg className="absolute inset-0 w-full h-full text-secondary/20" fill="none" stroke="currentColor" strokeWidth="2">

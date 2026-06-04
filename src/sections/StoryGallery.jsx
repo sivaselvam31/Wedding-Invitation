@@ -1,11 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import firstMeetingImg from '../assets/story_first_meeting.png';
-import proposalImg from '../assets/story_proposal.png';
-import image_1 from '../assets/images/image_1.png';
-import image_2 from '../assets/images/image_2.png';
-import image_3 from '../assets/images/image_3.png';
-import image_4 from '../assets/images/image_4.png';
+import image_1 from '../assets/images/image_1.webp';
+import image_2 from '../assets/images/image_2.webp';
+import image_3 from '../assets/images/image_3.webp';
+import image_4 from '../assets/images/image_4.webp';
 
 const STORIES = [
   {
@@ -33,6 +31,34 @@ const STORIES = [
     align: 'right', 
   }
 ];
+
+// Helper component to render images with a smooth fade-in animation and shimmer placeholder
+function GalleryImage({ src, alt }) {
+  const [isLoaded, setIsLoaded] = React.useState(false);
+
+  return (
+    <div className="relative w-full h-full">
+      {/* Delicate pulsing shimmer placeholder */}
+      <div 
+        className={`absolute inset-0 bg-surface transition-opacity duration-500 z-10 ${
+          isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        }`}
+      >
+        <div className="w-full h-full bg-linear-to-r from-primary/5 via-primary/10 to-primary/5 animate-pulse" />
+      </div>
+
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        onLoad={() => setIsLoaded(true)}
+        className={`w-full h-full object-cover select-none transition-all duration-700 hover:scale-105 ${
+          isLoaded ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-98 blur-xs'
+        }`}
+      />
+    </div>
+  );
+}
 
 export default function StoryGallery() {
   return (
@@ -68,14 +94,9 @@ export default function StoryGallery() {
               >
                 {/* Image Card Container with Locked Aspect Ratio */}
                 <div className="relative overflow-hidden rounded-2xl shadow-medium border border-primary/5 aspect-3/4 w-full bg-surface">
-                  <img
-                    src={story.image}
-                    alt={story.title}
-                    loading="lazy"
-                    className="w-full h-full object-cover select-none transition-transform duration-700 hover:scale-105"
-                  />
+                  <GalleryImage src={story.image} alt={story.title} />
                   {/* Subtle soft gradient over image for premium cinematic feel */}
-                  <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent pointer-events-none z-20" />
                 </div>
 
                 {/* Story Description Block */}
