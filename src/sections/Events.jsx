@@ -39,7 +39,7 @@ export default function Events() {
             Schedule of Celebrations
           </h2>
           <p className="font-sans text-xs text-text-secondary max-w-xs mx-auto">
-            Please join us in celebrating these special moments. We look forward to your presence.
+            Join us in celebrating these special moments. We look forward to your presence.
           </p>
         </motion.div>
 

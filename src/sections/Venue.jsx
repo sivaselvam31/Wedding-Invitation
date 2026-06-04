@@ -80,19 +80,12 @@ export default function Venue() {
             </div>
           </div>
 
-          {/* Directions / Landmark Info */}
+          {/* Directions Info */}
           <div className="space-y-3 mb-6 text-left border-t border-primary/5 pt-4">
             <div>
               <span className="font-sans text-[10px] text-text-secondary uppercase tracking-widest block">Address</span>
               <p className="font-sans text-xs text-text-primary mt-0.5 leading-relaxed font-light">
-                Pillaiyarpalayam, Kanchipuram, Tamil Nadu 631501, India
-              </p>
-            </div>
-            
-            <div>
-              <span className="font-sans text-[10px] text-text-secondary uppercase tracking-widest block">Landmark</span>
-              <p className="font-sans text-xs text-text-primary mt-0.5 font-light">
-                Near Sengunthar School, Pillaiyarpalayam
+                Pillaiyarpalayam, Kanchipuram, Tamil Nadu - 631501.
               </p>
             </div>
           </div>

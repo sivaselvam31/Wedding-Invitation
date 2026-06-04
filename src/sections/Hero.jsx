@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import useMobileCanvasScrubber from '../hooks/useMobileCanvasScrubber';
-import { ChevronDown, Heart } from 'lucide-react';
+import React, { useRef, useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import useMobileCanvasScrubber from "../hooks/useMobileCanvasScrubber";
+import { ChevronDown, Heart } from "lucide-react";
 
 export default function Hero({ onPreloadComplete, onProgressUpdate }) {
   const containerRef = useRef(null);
@@ -10,11 +10,14 @@ export default function Hero({ onPreloadComplete, onProgressUpdate }) {
   // Track scroll progress over the 500vh container
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start start', 'end end'],
+    offset: ["start start", "end end"],
   });
 
   // Connect the canvas scrubber to the scroll progress
-  const { loadingProgress, isPreloaded } = useMobileCanvasScrubber(canvasRef, scrollYProgress);
+  const { loadingProgress, isPreloaded } = useMobileCanvasScrubber(
+    canvasRef,
+    scrollYProgress,
+  );
 
   // Send preloading progress values to the parent App orchestrator
   useEffect(() => {
@@ -30,18 +33,26 @@ export default function Hero({ onPreloadComplete, onProgressUpdate }) {
   }, [loadingProgress, onProgressUpdate]);
 
   // Overlay 1: Bride & Groom Names (Active from 0% to 25% scroll)
-  const opacity1 = useTransform(scrollYProgress, [0, 0.12, 0.22, 0.3], [1, 1, 0, 0]);
-  const y1 = useTransform(scrollYProgress, [0, 0.12, 0.22, 0.3], [0, 0, -35, -35]);
+  const opacity1 = useTransform(
+    scrollYProgress,
+    [0, 0.12, 0.22, 0.3, 1],
+    [1, 1, 0, 0, 0],
+    { clamp: true },
+  );
+  const y1 = useTransform(
+    scrollYProgress,
+    [0, 0.12, 0.22, 0.3, 1],
+    [0, 0, -35, -35, -35],
+    { clamp: true },
+  );
 
-
-  // // Define dot background color transformations at the top level to adhere strictly to the Rules of Hooks
-  // const bgDot0 = useTransform(scrollYProgress, [-0.1, 0, 0.1], ['rgba(123, 75, 122, 0.2)', 'rgba(123, 75, 122, 1)', 'rgba(123, 75, 122, 0.2)']);
-  // const bgDot1 = useTransform(scrollYProgress, [0.15, 0.25, 0.35], ['rgba(123, 75, 122, 0.2)', 'rgba(123, 75, 122, 1)', 'rgba(123, 75, 122, 0.2)']);
-  // const bgDot2 = useTransform(scrollYProgress, [0.4, 0.5, 0.6], ['rgba(123, 75, 122, 0.2)', 'rgba(123, 75, 122, 1)', 'rgba(123, 75, 122, 0.2)']);
-  // const bgDot3 = useTransform(scrollYProgress, [0.65, 0.75, 0.85], ['rgba(123, 75, 122, 0.2)', 'rgba(123, 75, 122, 1)', 'rgba(123, 75, 122, 0.2)']);
-  // const bgDot4 = useTransform(scrollYProgress, [0.9, 1, 1.1], ['rgba(123, 75, 122, 0.2)', 'rgba(123, 75, 122, 1)', 'rgba(123, 75, 122, 0.2)']);
-
-  // const dotBackgrounds = [bgDot0, bgDot1, bgDot2, bgDot3, bgDot4];
+  // Scroll Indicator: Visible initially, fades out quickly as user scrolls down
+  const scrollIndicatorOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.05, 1],
+    [1, 0, 0],
+    { clamp: true },
+  );
 
   return (
     <div ref={containerRef} className="relative w-full h-[500vh] bg-background">
@@ -57,22 +68,86 @@ export default function Hero({ onPreloadComplete, onProgressUpdate }) {
 
         {/* Text Overlay 1: Welcome & Names */}
         <motion.div
-          style={{ opacity: opacity1, y: y1 }}
           className="absolute inset-x-6 top-[20%] flex flex-col items-center text-center pointer-events-none"
+          style={{ opacity: opacity1, y: y1 }}
         >
-          <span className="font-sans text-xs tracking-[0.25em] uppercase text-surface mb-3 text-shadow-elegant">
-            The Wedding Invitation
-          </span>
-          <div className="w-6 h-px bg-accent/60 mb-5" />
-          <h1 className="font-serif text-6xl font-semibold text-purple-300 leading-tight text-shadow-elegant">
-            Domesh
-            <span className="block font-sans text-lg italic text-accent my-1">&amp;</span>
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="font-yesteryear text-xs tracking-[0.25em] uppercase text-black mb-3 text-shadow-elegant"
+          >
+            Wedding Invitation
+          </motion.span>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="w-6 h-px bg-accent/60 mb-5"
+          />
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="font-elegant text-7xl font-semibold text-custom-red leading-tight text-shadow-elegant"
+          >
+            Domesan
+            <span className="block text-4xl font-bold text-surface my-1">
+              &amp;
+            </span>
             Sivaranjani
-          </h1>
-          <div className="w-6 h-px bg-accent/60 mt-5 mb-4" />
-          <p className="font-serif text-lg text-black px-4 max-w-xs leading-relaxed text-shadow-elegant">
+          </motion.h1>
+
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.6, delay: 0.55 }}
+            className="w-6 h-px bg-accent/60 mt-5 mb-4"
+          />
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="font-yesteryear text-xl text-black px-4 max-w-xs leading-relaxed tracking-wide text-shadow-elegant"
+          >
             Together with our families, we invite you to celebrate our wedding.
-          </p>
+          </motion.p>
+        </motion.div>
+
+        {/* Animated Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          style={{ opacity: scrollIndicatorOpacity }}
+          className="absolute bottom-[6dvh] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5 pointer-events-none select-none z-30"
+        >
+          <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-text-secondary/80 text-shadow-elegant">
+            Scroll to Begin
+          </span>
+
+          {/* Delicate scroll track and indicator */}
+          <div className="relative flex flex-col items-center">
+            {/* The thin vertical guideline */}
+            <div className="w-1px h-14 bg-linear-to-b from-accent/50 via-accent/20 to-transparent" />
+
+            {/* The floating element (a tiny delicate gold heart) */}
+            <motion.div
+              className="absolute top-0 text-custom-red"
+              animate={{
+                y: [0, 24, 0],
+                opacity: [0.4, 1, 0.4],
+                scale: [0.8, 1.1, 0.8],
+              }}
+              transition={{
+                duration: 2.2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <Heart className="w-3.5 h-3.5 fill-custom-red stroke-custom-red" />
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </div>

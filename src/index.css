@@ -3,12 +3,13 @@
 @theme {
   --color-primary: #7B4B7A;
   --color-secondary: #B58BAF;
-  --color-accent: #D8B26E;
+  --color-accent: #F1C40F;
   --color-background: #FFF6F8;
   --color-surface: #F8EFF5;
   --color-text-primary: #3E2A3E;
   --color-text-secondary: #7D627D;
   --color-success: #6D9F71;
+  --color-custom-red: #D5006D;
   
   --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
   --shadow-medium: 0 12px 32px rgba(0, 0, 0, 0.1);
@@ -20,6 +21,10 @@
 
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: "Outfit", sans-serif;
+  --font-elegant: "Fleur De Leah", cursive;
+  --font-doulaise: "Monsieur La Doulaise", cursive;
+  --font-script: "Rouge Script", cursive;
+  --font-yesteryear: "Yesteryear", cursive;
 }
 
 /* Base Styles */
@@ -60,7 +65,17 @@ body {
 
 /* Elegant Text Shadows for Cinematic Overlays */
 .text-shadow-elegant {
-  text-shadow: 0 2px 4px rgba(62, 42, 62, 0.15), 0 4px 12px rgba(62, 42, 62, 0.1);
+  text-shadow: 0 2px 4px rgba(139, 72, 91, 0.15), 0 4px 12px rgba(229, 81, 145, 0.1);
+}
+
+/* Deep 3D Elevation Text Shadow for realistic floating depth */
+.text-shadow-elevated {
+  text-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.3),
+    0 2px 3px rgba(62, 42, 62, 0.25),
+    0 6px 10px rgba(62, 42, 62, 0.2),
+    0 12px 20px rgba(62, 42, 62, 0.15),
+    0 20px 30px rgba(62, 42, 62, 0.1);
 }
 
 .text-shadow-gold {

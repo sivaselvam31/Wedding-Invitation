@@ -20,9 +20,10 @@ export default function App() {
   // Initialize Lenis Smooth Scroll
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.8, // Increased from 1.2s to make the scroll transition longer and more gradual
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 1.2,
+      wheelMultiplier: 0.8, // Decreased to reduce scroll distance per wheel click
+      touchMultiplier: 0.5, // Decreased from 1.2 to make touch scrolling less sensitive
       infinite: false,
       gestureOrientation: 'vertical',
     });

@@ -64,7 +64,7 @@ export default function Countdown() {
           {timeItems.map((item, index) => (
             <motion.div
               key={item.label}
-              className="glass-panel rounded-2xl p-4 flex flex-col items-center justify-center aspect-square shadow-soft"
+              className="glass-panel rounded-4xl p-4 flex flex-col items-center justify-center aspect-square shadow-soft"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}

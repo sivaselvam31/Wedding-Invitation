@@ -42,11 +42,11 @@ export default function Outro() {
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.3 }}
         >
-          <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-text-secondary">
+          <span className="font-yesteryear text-[10px] tracking-[0.3em] uppercase text-text-secondary">
             With Love
           </span>
-          <h3 className="font-serif text-2xl text-primary font-bold tracking-wide mt-1">
-            Domesh &amp; Sivaranjani
+          <h3 className="font-yesteryear text-2xl text-primary font-light tracking-wider mt-1">
+            Domesan &amp; Sivaranjani
           </h3>
         </motion.div>
 

@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
-// Total frames is now 120 (sampling every 2nd frame from the 240 original frames)
-const TOTAL_FRAMES = 120;
+// Total frames 240 (all frames in the frames folder)
+const TOTAL_FRAMES = 240;
 
 const getFrameUrl = (index) => {
-  const actualIndex = index * 2;
-  const filename = `frame_${String(actualIndex).padStart(3, '0')}_delay-0.042s.webp`;
+  const filename = `frame_${String(index).padStart(3, '0')}_delay-0.042s.webp`;
   return `/frames/${filename}`;
 };
 
@@ -15,11 +14,30 @@ export default function useMobileCanvasScrubber(canvasRef, scrollProgress) {
   const imagesRef = useRef([]);
   const lastDrawnIndexRef = useRef(-1);
   const scrollProgressRef = useRef(scrollProgress);
+  const canvasSizeRef = useRef({ width: 0, height: 0 });
+  const drawScheduledRef = useRef(null);
 
   // Sync scroll progress ref to access inside image onload callbacks
   useEffect(() => {
     scrollProgressRef.current = scrollProgress;
   }, [scrollProgress]);
+
+  // Keep track of the canvas dimensions to avoid layout thrashing during scroll via getBoundingClientRect()
+  const measureCanvasSize = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    canvasSizeRef.current = {
+      width: rect.width || window.innerWidth,
+      height: rect.height || window.innerHeight,
+    };
+  };
+
+  useEffect(() => {
+    measureCanvasSize();
+    window.addEventListener('resize', measureCanvasSize);
+    return () => window.removeEventListener('resize', measureCanvasSize);
+  }, []);
 
   // Function to draw a specific frame index on the canvas
   const drawFrame = (index) => {
@@ -31,15 +49,14 @@ export default function useMobileCanvasScrubber(canvasRef, scrollProgress) {
     const img = imagesRef.current[index];
     if (!img || !img.complete) return; // Skip if not loaded yet
 
-    const rect = canvas.getBoundingClientRect();
     const pixelRatio = Math.min(window.devicePixelRatio, 1.5); // Capped at 1.5 for GPU memory
 
-    // Fallback to window dimensions if rect is 0 (layout not fully computed yet)
-    const width = rect.width || window.innerWidth;
-    const height = rect.height || window.innerHeight;
+    const { width, height } = canvasSizeRef.current;
+    const w = width || window.innerWidth;
+    const h = height || window.innerHeight;
 
-    const canvasWidth = width * pixelRatio;
-    const canvasHeight = height * pixelRatio;
+    const canvasWidth = w * pixelRatio;
+    const canvasHeight = h * pixelRatio;
 
     if (canvas.width !== canvasWidth || canvas.height !== canvasHeight) {
       canvas.width = canvasWidth;
@@ -73,11 +90,31 @@ export default function useMobileCanvasScrubber(canvasRef, scrollProgress) {
     lastDrawnIndexRef.current = index;
   };
 
+  // Throttle draws to requestAnimationFrame to prevent double-draws in single-tick rendering
+  const scheduleDrawFrame = (index) => {
+    if (drawScheduledRef.current !== null) {
+      cancelAnimationFrame(drawScheduledRef.current);
+    }
+    drawScheduledRef.current = requestAnimationFrame(() => {
+      drawFrame(index);
+      drawScheduledRef.current = null;
+    });
+  };
+
+  // Clean up any pending animation frames on unmount
+  useEffect(() => {
+    return () => {
+      if (drawScheduledRef.current !== null) {
+        cancelAnimationFrame(drawScheduledRef.current);
+      }
+    };
+  }, []);
+
   // Trigger redraw once loading is complete and the UI layout transitions
   useEffect(() => {
     if (isPreloaded) {
       const timer = setTimeout(() => {
-        drawFrame(0);
+        scheduleDrawFrame(0);
       }, 150);
       return () => clearTimeout(timer);
     }
@@ -123,7 +160,7 @@ export default function useMobileCanvasScrubber(canvasRef, scrollProgress) {
               Math.max(0, Math.floor(currentProgress * TOTAL_FRAMES))
             );
             if (i === currentFrameIndex) {
-              drawFrame(currentFrameIndex);
+              scheduleDrawFrame(currentFrameIndex);
             }
           }
 
@@ -154,7 +191,7 @@ export default function useMobileCanvasScrubber(canvasRef, scrollProgress) {
       if (!active) return;
       images[0] = img0;
       updateProgress();
-      drawFrame(0);
+      scheduleDrawFrame(0);
       
       // 2. Load frames 1-30 in parallel immediately
       loadRange(1, 30);
@@ -203,13 +240,13 @@ export default function useMobileCanvasScrubber(canvasRef, scrollProgress) {
       );
 
       if (frameIndex !== lastDrawnIndexRef.current) {
-        drawFrame(frameIndex);
+        scheduleDrawFrame(frameIndex);
       }
     });
 
     const handleResize = () => {
       if (lastDrawnIndexRef.current !== -1) {
-        drawFrame(lastDrawnIndexRef.current);
+        scheduleDrawFrame(lastDrawnIndexRef.current);
       }
     };
 
