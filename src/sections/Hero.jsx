@@ -54,6 +54,7 @@ export default function Hero({ onPreloadComplete, onProgressUpdate }) {
     { clamp: true },
   );
 
+
   return (
     <div ref={containerRef} className="relative w-full h-[500vh] bg-background">
       {/* Sticky Canvas Container */}
@@ -73,7 +74,7 @@ export default function Hero({ onPreloadComplete, onProgressUpdate }) {
         >
           <motion.span
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isPreloaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="font-yesteryear text-xs tracking-[0.25em] uppercase text-black mb-3 text-shadow-elegant"
           >
@@ -81,13 +82,13 @@ export default function Hero({ onPreloadComplete, onProgressUpdate }) {
           </motion.span>
           <motion.div
             initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
+            animate={isPreloaded ? { scaleX: 1 } : { scaleX: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
             className="w-6 h-px bg-accent/60 mb-5"
           />
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isPreloaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             className="font-elegant text-7xl font-semibold text-custom-red leading-tight text-shadow-elegant"
           >
@@ -100,13 +101,13 @@ export default function Hero({ onPreloadComplete, onProgressUpdate }) {
 
           <motion.div
             initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
+            animate={isPreloaded ? { scaleX: 1 } : { scaleX: 0 }}
             transition={{ duration: 0.6, delay: 0.55 }}
             className="w-6 h-px bg-accent/60 mt-5 mb-4"
           />
           <motion.p
             initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isPreloaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
             transition={{ duration: 0.8, delay: 0.6 }}
             className="font-yesteryear text-xl text-black px-4 max-w-xs leading-relaxed tracking-wide text-shadow-elegant"
           >
@@ -117,7 +118,7 @@ export default function Hero({ onPreloadComplete, onProgressUpdate }) {
         {/* Animated Scroll Indicator */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={isPreloaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
           transition={{ duration: 0.8, delay: 0.8 }}
           style={{ opacity: scrollIndicatorOpacity }}
           className="absolute bottom-[6dvh] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5 pointer-events-none select-none z-30"
@@ -148,6 +149,43 @@ export default function Hero({ onPreloadComplete, onProgressUpdate }) {
               <Heart className="w-3.5 h-3.5 fill-custom-red stroke-custom-red" />
             </motion.div>
           </div>
+        </motion.div>
+
+        {/* Circular Scroll Progress Indicator (Right Bottom) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={isPreloaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.8, delay: 1 }}
+          className="absolute bottom-[6dvh] right-6 z-40 flex items-center justify-center w-10 h-10 rounded-full shadow-soft border border-primary/10 select-none pointer-events-none"
+        >
+          {/* Label indicating scroll (always visible, clean and elegant) */}
+          <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 font-sans text-[8px] tracking-[0.2em] uppercase text-text-secondary bg-background/50 backdrop-blur-xs px-2 py-0.75 rounded-md border border-primary/5 whitespace-nowrap shadow-xs opacity-80">
+            Scroll
+          </span>
+
+          {/* SVG Progress Ring */}
+          <svg className="absolute w-full h-full -rotate-90" viewBox="0 0 44 44">
+            {/* Background circle track */}
+            <circle
+              cx="22"
+              cy="22"
+              r="19"
+              className="stroke-primary/10 fill-none"
+              strokeWidth="2.5"
+            />
+            {/* Active progress path */}
+            <motion.circle
+              cx="22"
+              cy="22"
+              r="19"
+              className="stroke-custom-red fill-none"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              style={{
+                pathLength: scrollYProgress,
+              }}
+            />
+          </svg>
         </motion.div>
       </div>
     </div>
